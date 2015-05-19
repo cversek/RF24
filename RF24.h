@@ -282,7 +282,7 @@ s   *
    * @endcode
    */
   void printDetails(void);
-
+  void printDetails(const char* prefix); //alternate form with prefix before each line
   /**
    * Test whether there are bytes available to be read in the
    * FIFO buffers. 

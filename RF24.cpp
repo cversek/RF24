@@ -559,61 +559,66 @@ static const char * const rf24_csn_e_str_P[] = {
   rf24_csn_e_str_3,
 };
 #endif
-
 void RF24::printDetails(void)
+{
+  printDetails("");
+}
+
+void RF24::printDetails(const char* prefix)
 {
 
 #if defined (RF24_LINUX)
-  printf("================ SPI Configuration ================\n" );
+  printf(prefix); printf("================ SPI Configuration ================\n" );
   if (csn_pin < BCM2835_SPI_CS_NONE ){
-    printf("CSN Pin  \t = %s\n",rf24_csn_e_str_P[csn_pin]);
+    printf(prefix); printf("CSN Pin  \t = %s\n",rf24_csn_e_str_P[csn_pin]);
   }else{
-    printf("CSN Pin  \t = Custom GPIO%d%s\n", csn_pin,
+    printf(prefix); printf("CSN Pin  \t = Custom GPIO%d%s\n", csn_pin,
     csn_pin==RPI_V2_GPIO_P1_26 ? " (CE1) Software Driven" : "" );
   }
-  printf("CE Pin  \t = Custom GPIO%d\n", ce_pin );
-  printf("Clock Speed\t = " );
+  printf(prefix); printf("CE Pin  \t = Custom GPIO%d\n", ce_pin );
+  printf(prefix); printf("Clock Speed\t = " );
   switch (spi_speed)
   {
-    case BCM2835_SPI_SPEED_64MHZ : printf("64 Mhz");	break ;
-    case BCM2835_SPI_SPEED_32MHZ : printf("32 Mhz");	break ;
-    case BCM2835_SPI_SPEED_16MHZ : printf("16 Mhz");	break ;
-    case BCM2835_SPI_SPEED_8MHZ  : printf("8 Mhz");	break ;
-    case BCM2835_SPI_SPEED_4MHZ  : printf("4 Mhz");	break ;
-    case BCM2835_SPI_SPEED_2MHZ  : printf("2 Mhz");	break ;
-    case BCM2835_SPI_SPEED_1MHZ  : printf("1 Mhz");	break ;
-    case BCM2835_SPI_SPEED_512KHZ: printf("512 KHz");	break ;
-    case BCM2835_SPI_SPEED_256KHZ: printf("256 KHz");	break ;
-    case BCM2835_SPI_SPEED_128KHZ: printf("128 KHz");	break ;
-    case BCM2835_SPI_SPEED_64KHZ : printf("64 KHz");	break ;
-    case BCM2835_SPI_SPEED_32KHZ : printf("32 KHz");	break ;
-    case BCM2835_SPI_SPEED_16KHZ : printf("16 KHz");	break ;
-    case BCM2835_SPI_SPEED_8KHZ  : printf("8 KHz");	break ;
-    default : printf("Probably Bad !!!");	break ;
+    case BCM2835_SPI_SPEED_64MHZ : printf("64 Mhz"); break ;
+    case BCM2835_SPI_SPEED_32MHZ : printf("32 Mhz"); break ;
+    case BCM2835_SPI_SPEED_16MHZ : printf("16 Mhz"); break ;
+    case BCM2835_SPI_SPEED_8MHZ  : printf("8 Mhz"); break ;
+    case BCM2835_SPI_SPEED_4MHZ  : printf("4 Mhz"); break ;
+    case BCM2835_SPI_SPEED_2MHZ  : printf("2 Mhz"); break ;
+    case BCM2835_SPI_SPEED_1MHZ  : printf("1 Mhz"); break ;
+    case BCM2835_SPI_SPEED_512KHZ: printf("512 KHz"); break ;
+    case BCM2835_SPI_SPEED_256KHZ: printf("256 KHz"); break ;
+    case BCM2835_SPI_SPEED_128KHZ: printf("128 KHz"); break ;
+    case BCM2835_SPI_SPEED_64KHZ : printf("64 KHz"); break ;
+    case BCM2835_SPI_SPEED_32KHZ : printf("32 KHz"); break ;
+    case BCM2835_SPI_SPEED_16KHZ : printf("16 KHz"); break ;
+    case BCM2835_SPI_SPEED_8KHZ  : printf("8 KHz"); break ;
+    default : printf("Probably Bad !!!"); break ;
   }
-  printf("\n================ NRF Configuration ================\n");
+  printf("\n");
+  printf(prefix); printf("================ NRF Configuration ================\n");
 #endif //Linux
-  print_status(get_status());
-  print_address_register(PSTR("RX_ADDR_P0-1"),RX_ADDR_P0,2);
-  print_byte_register(PSTR("RX_ADDR_P2-5"),RX_ADDR_P2,4);
-  print_address_register(PSTR("TX_ADDR"),TX_ADDR);
-  print_byte_register(PSTR("RX_PW_P0-6"),RX_PW_P0,6);
-  print_byte_register(PSTR("EN_AA"),EN_AA);
-  print_byte_register(PSTR("EN_RXADDR"),EN_RXADDR);
-  print_byte_register(PSTR("RF_CH"),RF_CH);
-  print_byte_register(PSTR("RF_SETUP"),RF_SETUP);
-  print_byte_register(PSTR("CONFIG"),CONFIG);
-  print_byte_register(PSTR("DYNPD/FEATURE"),DYNPD,2);
+  printf(prefix); print_status(get_status());
+  printf(prefix); print_address_register(PSTR("RX_ADDR_P0-1"),RX_ADDR_P0,2);
+  printf(prefix); print_byte_register(PSTR("RX_ADDR_P2-5"),RX_ADDR_P2,4);
+  printf(prefix); print_address_register(PSTR("TX_ADDR"),TX_ADDR);
+  printf(prefix); print_byte_register(PSTR("RX_PW_P0-6"),RX_PW_P0,6);
+  printf(prefix); print_byte_register(PSTR("EN_AA"),EN_AA);
+  printf(prefix); print_byte_register(PSTR("EN_RXADDR"),EN_RXADDR);
+  printf(prefix); print_byte_register(PSTR("RF_CH"),RF_CH);
+  printf(prefix); print_byte_register(PSTR("RF_SETUP"),RF_SETUP);
+  printf(prefix); print_byte_register(PSTR("CONFIG"),CONFIG);
+  printf(prefix); print_byte_register(PSTR("DYNPD/FEATURE"),DYNPD,2);
 #if defined(__arm__) || defined (RF24_LINUX) || defined (__ARDUINO_X86__) || defined(LITTLEWIRE)
-  printf_P(PSTR("Data Rate\t = %s\r\n"),pgm_read_word(&rf24_datarate_e_str_P[getDataRate()]));
-  printf_P(PSTR("Model\t\t = %s\r\n"),pgm_read_word(&rf24_model_e_str_P[isPVariant()]));
-  printf_P(PSTR("CRC Length\t = %s\r\n"),pgm_read_word(&rf24_crclength_e_str_P[getCRCLength()]));
-  printf_P(PSTR("PA Power\t = %s\r\n"),  pgm_read_word(&rf24_pa_dbm_e_str_P[getPALevel()]));
+  printf(prefix); printf_P(PSTR("Data Rate\t = %s\r\n"),pgm_read_word(&rf24_datarate_e_str_P[getDataRate()]));
+  printf(prefix); printf_P(PSTR("Model\t\t = %s\r\n"),pgm_read_word(&rf24_model_e_str_P[isPVariant()]));
+  printf(prefix); printf_P(PSTR("CRC Length\t = %s\r\n"),pgm_read_word(&rf24_crclength_e_str_P[getCRCLength()]));
+  printf(prefix); printf_P(PSTR("PA Power\t = %s\r\n"),  pgm_read_word(&rf24_pa_dbm_e_str_P[getPALevel()]));
 #else
-  printf_P(PSTR("Data Rate\t = %S\r\n"), pgm_read_word(&rf24_datarate_e_str_P[getDataRate()]));
-  printf_P(PSTR("Model\t\t = %S\r\n"),   pgm_read_word(&rf24_model_e_str_P[isPVariant()]));
-  printf_P(PSTR("CRC Length\t = %S\r\n"),pgm_read_word(&rf24_crclength_e_str_P[getCRCLength()]));
-  printf_P(PSTR("PA Power\t = %S\r\n"),  pgm_read_word(&rf24_pa_dbm_e_str_P[getPALevel()]));
+  printf(prefix); printf_P(PSTR("Data Rate\t = %S\r\n"), pgm_read_word(&rf24_datarate_e_str_P[getDataRate()]));
+  printf(prefix); printf_P(PSTR("Model\t\t = %S\r\n"),   pgm_read_word(&rf24_model_e_str_P[isPVariant()]));
+  printf(prefix); printf_P(PSTR("CRC Length\t = %S\r\n"),pgm_read_word(&rf24_crclength_e_str_P[getCRCLength()]));
+  printf(prefix); printf_P(PSTR("PA Power\t = %S\r\n"),  pgm_read_word(&rf24_pa_dbm_e_str_P[getPALevel()]));
 #endif
 }
 
