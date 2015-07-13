@@ -622,6 +622,40 @@ void RF24::printDetails(const char* prefix)
 #endif
 }
 
+#ifdef ARDUINO
+void RF24::arduinoPrintStreamDetails(const char* prefix, Stream &port)
+{
+  uint8_t buffer[addr_width];
+  //printf(prefix); print_status(get_status());
+  port.print(prefix);
+  uint8_t status = get_status();
+  port.print(F("STATUS\t\t = ")); port.print(status,HEX);
+  port.print(F(" RX_DR=%x"));   port.print(( status & _BV(RX_DR))  ?1:0,HEX);
+  port.print(F(" TX_DS=%x"));   port.print(( status & _BV(TX_DS))  ?1:0,HEX);
+  port.print(F(" MAX_RT=%x"));  port.print(( status & _BV(MAX_RT)) ?1:0,HEX);
+  port.print(F(" RX_P_NO=%x")); port.print(((status >> RX_P_NO) & 0b111),HEX);
+  port.print(F(" TX_FULL=%x")); port.print(( status & _BV(TX_FULL))?1:0,HEX);
+  port.println();
+  //printf(prefix); print_address_register(PSTR("RX_ADDR_P0-1"),RX_ADDR_P0,2);
+  //port.print("RX_ADDR_P0-1"
+  //read_register(RX_ADDR_P0,buffer,sizeof buffer);
+  //port.print(
+  //printf(prefix); print_byte_register(PSTR("RX_ADDR_P2-5"),RX_ADDR_P2,4);
+//  printf(prefix); print_address_register(PSTR("TX_ADDR"),TX_ADDR);
+//  printf(prefix); print_byte_register(PSTR("RX_PW_P0-6"),RX_PW_P0,6);
+//  printf(prefix); print_byte_register(PSTR("EN_AA"),EN_AA);
+//  printf(prefix); print_byte_register(PSTR("EN_RXADDR"),EN_RXADDR);
+//  printf(prefix); print_byte_register(PSTR("RF_CH"),RF_CH);
+//  printf(prefix); print_byte_register(PSTR("RF_SETUP"),RF_SETUP);
+//  printf(prefix); print_byte_register(PSTR("CONFIG"),CONFIG);
+//  printf(prefix); print_byte_register(PSTR("DYNPD/FEATURE"),DYNPD,2);
+  port.print(prefix); port.print(F("Data Rate\t = "));  port.print(pgm_read_word(&rf24_datarate_e_str_P[getDataRate()]));
+  port.print(prefix); port.print(F("Model\t\t = "));    port.print(pgm_read_word(&rf24_model_e_str_P[isPVariant()]));
+  port.print(prefix); port.print(F("CRC Length\t = ")); port.print(pgm_read_word(&rf24_crclength_e_str_P[getCRCLength()]));
+  port.print(prefix); port.print(F("PA Power\t = "));   port.print(pgm_read_word(&rf24_pa_dbm_e_str_P[getPALevel()]));
+}
+#endif
+
 #endif
 /****************************************************************************/
 
@@ -979,6 +1013,13 @@ void RF24::startWrite( const void* buf, uint8_t len, const bool multicast ){
 bool RF24::rxFifoFull(){
   return read_register(FIFO_STATUS) & _BV(RX_FULL);
 }
+
+/****************************************************************************/
+
+bool RF24::txFifoFull(){
+  return ( get_status()  &  _BV(TX_FULL) );
+}
+
 /****************************************************************************/
 
 bool RF24::txStandBy(){

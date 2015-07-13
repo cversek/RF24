@@ -283,6 +283,9 @@ s   *
    */
   void printDetails(void);
   void printDetails(const char* prefix); //alternate form with prefix before each line
+  #ifdef ARDUINO
+  void arduinoPrintStreamDetails(const char* prefix, Stream &port);
+  #endif
   /**
    * Test whether there are bytes available to be read in the
    * FIFO buffers. 
@@ -306,6 +309,11 @@ s   *
    * @return True if all three 32-byte radio buffers are full
    */
   bool rxFifoFull();
+  
+  /**
+   * Check if the write FIFO is full (i.e., writeFast would block).
+   */
+  bool txFifoFull();
 
   /**
    * Enter low-power mode
