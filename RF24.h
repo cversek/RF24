@@ -594,13 +594,7 @@ s   *
    */
    void reUseTX();
 
-  /**
-   * Empty the transmit buffer. This is generally not required in standard operation.
-   * May be required in specific cases after stopListening() , if operating at 250KBPS data rate.
-   *
-   * @return Current value of status register
-   */
-  uint8_t flush_tx(void);
+  
 
   /**
    * Test whether there was a carrier on the line for the
@@ -924,6 +918,22 @@ s   *
    * @param address The 40-bit address of the pipe to open.
    */
   void openWritingPipe(uint64_t address);
+  
+  
+   /**
+   * Empty the receive buffer
+   *
+   * @return Current value of status register
+   */
+  uint8_t flush_rx(void);
+  
+  /**
+   * Empty the transmit buffer. This is generally not required in standard operation.
+   * May be required in specific cases after stopListening() , if operating at 250KBPS data rate.
+   *
+   * @return Current value of status register
+   */
+  uint8_t flush_tx(void);
 
 private:
 
@@ -1015,12 +1025,7 @@ private:
    */
   uint8_t read_payload(void* buf, uint8_t len);
 
-  /**
-   * Empty the receive buffer
-   *
-   * @return Current value of status register
-   */
-  uint8_t flush_rx(void);
+
 
   /**
    * Retrieve the current status of the chip
